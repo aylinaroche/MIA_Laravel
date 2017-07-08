@@ -38,39 +38,46 @@ Route::get('/welcom', function () {
 
 //Route::get('/posts','PostsController@index');
 
-
-
-Route::get('/', function () {
-
-  return view('cloud.inicio');
-   
-});
+//PRUEBA
 
 Route::name('store')->post('/posts','PostsController@store');
 
-//Route::resource('store','PsController');
-
 Route::resource('post','PsController');
-
-Route::name('registrar')->post('/','UsuarioController@store');
 
 Route::name('inicio')->get('/','PostsController@index');
 
-Route::name('login')->get('/','LoginController@index');
+
+//INICIO
+
+Route::resource('/','InicioController');
+
+//EMAIL
+
+Route::name('mail')->get('/mail/{correo}','EmailController@store');
+
+//AUTH
 
 Auth::routes();
-
-
-
-//
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 
+/*			USUARIO 		*/
 
-//Route::resource('mail','EmailController@store');
 
-Route::name('mail')->get('/mail/{correo}','EmailController@store');
+Route::name('registrar')->post('/','UsuarioController@store');
+
+//EDITAR
+
+Route::get('/modificar', 'UsuarioController@index')->name('modificar');
+
+Route::resource('usuario', 'UsuarioController');
+
+
+Route::get('/actualizar', 'EditarController@index')->name('actualizar');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 

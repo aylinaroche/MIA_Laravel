@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent;
 use App\Usuario;
 use Redirect;
 use Carbon\Carbon;
+use DB;
 
 class UsuarioController extends Controller
 {
@@ -19,6 +20,10 @@ class UsuarioController extends Controller
     public function index()
     {
         //
+        $users = Usuario::all();
+       // return view('usuario.modificar')->with(['users' => $users]);
+         return view('usuario.modificar',compact('users'));
+    
     }
 
     /**
@@ -43,7 +48,6 @@ class UsuarioController extends Controller
                 'nombre' => 'required',
                 'correo' => 'required | email',
                 'clave' => 'required'
-                //'apellidos' => 'required | Url'
             ]);
 
         $fecha = $request->get('fecha_nac');
@@ -63,7 +67,7 @@ class UsuarioController extends Controller
         $user->direccion = $request->get('direccion');
         $user->fecha_reg = Carbon::today();
        // $user->rol = '1';
-        //$user->save();
+        $user->save();
 
         return Redirect()->route('mail',['correo'=> $correo]);
         //return back();
@@ -88,7 +92,16 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        //
+        //return view('usuario.editar')->with(['user' => $user]);
+        $user = new Usuario;
+
+        $user = Usuario::findOrFail($id);
+
+        return view('usuario.actualizar',compact('user'));
+      // return $user;
+
+
+       // return Redirect()->route('editar',['user' => $user]);
     }
 
     /**
@@ -100,7 +113,25 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+            //$user = Usuario::findOrFail($id);
+       /* $user->update(
+                $request->only('nombre','apellidos')
+            );*/
+              
+            $user = Usuario::find($id);
+        
+            $user->nombre = $request->get('nombre');
+            $user->apellidos = $request->get('apellidos');
+            $user->save();
+
+
+            $nombre = $request->nombre;
+            $apellidos = $request->apellidos;
+            DB::update('UPDATE Usuario SET nombre=\''.$nombre.'\', apellidos=\''.$apellidos.'\' WHERE id_usuario='.$id);
+
+        //return Redirect()->route('modificar',['user' => $user->id_usuario]);
+        //    return Redirect()->route('modificar');
+            return $user;
     }
 
     /**
@@ -111,6 +142,12 @@ class UsuarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Usuario::find($id);
+       // $user->delete();
+
+        DB::delete('DELETE from Usuario where id_usuario='.$id);
+    
+        //return Redirect()->route('modificar');
+        return $user;
     }
 }

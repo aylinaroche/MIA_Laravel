@@ -37,7 +37,7 @@ class PostsController extends Controller
      	$post->nombre = $request->get('nombre');
      	$post->apellidos = $request->get('apellidos');
 
-     	$post->save();
+     	//$post->save();
 
      	//return redirect()->route('cloud.inicio');
      	return "BIEEEEEEEEEEEEEEEEEN";
